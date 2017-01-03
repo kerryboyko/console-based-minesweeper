@@ -1,0 +1,39 @@
+{
+  "name": "console-based-minesweeper",
+  "version": "1.0.0",
+  "description": "A console-based Node minesweeper",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --require babel-polyfill --compilers js:babel-register",
+    "build": "babel src -d lib",
+    "exec": "npm run build && node lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianboyko/console-based-minesweeper.git"
+  },
+  "keywords": [
+    "minesweeper",
+    "node",
+    "console"
+  ],
+  "author": "Brian Boyko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brianboyko/console-based-minesweeper/issues"
+  },
+  "homepage": "https://github.com/brianboyko/console-based-minesweeper#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-polyfill": "^6.20.0",
+    "babel-preset-env": "^1.1.4",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.2.0"
+  }
+}
