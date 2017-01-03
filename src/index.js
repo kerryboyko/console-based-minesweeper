@@ -20,9 +20,7 @@ const alphaDict = {
   J: 9,
 }
 
-function isValidLetter(str) {
-  return str.length === 1 && str.match(/[a-j]/i);
-}
+export const isValidLetter = (str) => ((str.length === 1) && str.match(/[a-j]/i));
 
 // turns a Battleship code into a number from 0 - 99.
 export const parseEntry = (code) => {

@@ -4,15 +4,24 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-import {parseEntry} from '../src/index';
-
-const testUpper = (text) => _.toUpper(text);
+import {
+  parseEntry,
+  isValidLetter,
+} from '../src/index';
 
 describe('Metatest of Test Suite', function(){
-  describe('testUpper()', function(){
-    it('makes uppercase foo given lowercase foo', function(){
-      expect(testUpper("foo")).to.equal("FOO");
-    })
+  it('makes uppercase foo given lowercase foo', function(){
+    expect("foo".toUpperCase()).to.equal("FOO");
+  })
+})
+
+describe('isValidLetter()', function(){
+  const testString = (str) => str.split('').map((char) => isValidLetter(char));
+  it('should tell you whether something is a valid letter', function(){
+    expect(_.every(testString("abcdefghijABCDEFGHIJ"))).to.equal(true);
+  })
+  it('should tell you whether your entry is invalid', function(){
+    expect(_.every(testString("1234567890kLmNoPqRsT").map((el) => !el))).to.equal(true);
   })
 })
 
