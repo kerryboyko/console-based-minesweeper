@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import {parseEntry} from './parser';
 
+let ice = _.chunk(_.fill(Array(100), "?"), 10);
+
 const knuthShuffler = (array) => {
   for(let i = 0; i < array.length; i++){
     let rand = Math.floor(Math.random() * array.length);
@@ -44,4 +46,22 @@ export const layMinefield = (initialDig) => {
   return minefield;
 }
 
+
 export const createMinefield = (initialDig) => markMinefield(layMinefield(intialDig));
+
+export const dig = (minefield, oldIce, digSpot) => {
+  let digNum = parseEntry(digSpot);
+  let rowI = Math.floor(digNum/10);
+  let colI = digNum % 10;
+  if (oldIce[rowI][colI] !== "?" || oldIce[rowI][colI] !== 'M'){
+    return oldIce;
+  }
+  if (minefield[rowI][colI] === "*"){
+    console.log("BOOM!");
+    console.log("Game Over");
+    minefield.forEach((row) => console.log(row));
+  } else {
+    oldIce[rowI][colI] === minefield[rowI][colI];
+    if(minefield[rowI][colI] === )
+//LEFT OFF HERE  }
+}
