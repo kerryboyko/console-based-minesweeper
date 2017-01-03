@@ -7,13 +7,7 @@ const expect = chai.expect;
 import {
   parseEntry,
   isValidLetter,
-} from '../src/index';
-
-describe('Metatest of Test Suite', function(){
-  it('makes uppercase foo given lowercase foo', function(){
-    expect("foo".toUpperCase()).to.equal("FOO");
-  })
-})
+} from '../src/parser';
 
 describe('isValidLetter()', function(){
   const testString = (str) => str.split('').map((char) => isValidLetter(char));
