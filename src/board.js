@@ -114,11 +114,8 @@ export const flagMinefield = (ice, flagSpot) => {
 // needs test
 export const checkVictory = (minefield, ice) => {
   let flatIce = _.flatten(ice);
-  let countFlags = flatIce.filter((el) => (el === M)).length;
-  if (countFlags < 20){
-    return false;
-  }
-  if (countFlags > 20){
+  let countFlags = flatIce.filter((el) => (el === 'M')).length;
+  if (countFlags !== 20){
     return false;
   }
   if (countFlags === 20){

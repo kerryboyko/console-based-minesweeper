@@ -41,6 +41,7 @@ import {
   dig,
   createIce,
   flagMinefield,
+  checkVictory,
 } from '../src/board';
 
 describe('deepArrayCopy', function(){
@@ -176,7 +177,7 @@ describe('dig()', function(){
   })
 })
 
-describe('flagMinefield', function(){
+describe('flagMinefield()', function(){
   it('adds a flag', function(){
     let experiment = flagMinefield(ICE, "C3");
     let expected = ICE.slice(0, 3).concat([[
@@ -185,6 +186,49 @@ describe('flagMinefield', function(){
     expect(flagMinefield(ICE, "C3")).to.eql(expected)
   })
   it('removes a flag', function(){
-    expect(flagMinefield(flagMinefield(ICE, "C3"), "C3")).to.eql(ICE); 
+    expect(flagMinefield(flagMinefield(ICE, "C3"), "C3")).to.eql(ICE);
   })
+})
+
+describe('checkVictory()', function() {
+    it('returns false if there aren\'t enough flags', function() {
+        expect(checkVictory(MINES, ICE.slice(2).concat([
+            [
+                'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ],
+            [
+                '?', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ]
+        ]))).to.equal(false);
+    })
+    it('returns false if there are too many flags', function() {
+        expect(checkVictory(MINES, ICE.slice(3).concat([
+            [
+                'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ],
+            [
+                '?', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ],
+            [
+                '?', '?', '?', '?', '?', '?', '?', '?', 'M', 'M',
+            ]
+        ]))).to.equal(false);
+    })
+    it('returns false ', function() {
+        expect(checkVictory(MINES, ICE.slice(3).concat([
+            [
+                'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ],
+            [
+                '?', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M', 'M',
+            ],
+            [
+                '?', '?', '?', '?', '?', '?', '?', '?', 'M', 'M',
+            ]
+        ]))).to.equal(false);
+    })
+    it('returns true for a winning victory condition', function(){
+      let mineClear = MINES.map((row) => row.map((square) => square === "*" ? "M" : square));
+      expect(checkVictory(MINES, mineClear)).to.equal(true);
+    })
 })
