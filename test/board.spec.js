@@ -10,6 +10,7 @@ import {
   markMinefield,
   layMinefield,
   createMinefield,
+  findNeighbors,
 } from '../src/board';
 
 let testField = layMinefield("G7");
@@ -71,11 +72,24 @@ describe('markMinefield()', function() {
             let northwest = ((i > 0) && (j > 0) && minefield[i-1][j-1] === "*") ? 1 : 0;
             let northeast = ((i > 0) && (j < 9) && minefield[i-1][j+1] === "*") ? 1 : 0;
             let southwest = ((i < 9) && (j > 0) && minefield[i+1][j-1] === "*") ? 1 : 0;
-            let southeast = ((i > 9) && (j > 9) && minefield[i+1][j+1] === "*") ? 1 : 0;
+            let southeast = ((i < 9) && (j < 9) && minefield[i+1][j+1] === "*") ? 1 : 0;
             expect(mineCount).to.equal(north + south + west + east + northwest + northeast + southwest + southeast);
           }
         }
       }
     }
   })
+})
+
+describe('findNeighbors()', function(){
+  it('gets all the spaces around the dig spot', function(){
+    expect(findNeighbors("C4").sort()).to.eql(["B3", "B4", "B5", "C3", "C5", "D3", "D4", "D5"].sort())
+  })
+  it('gets all the spaces around the dig spot accounting for walls', function(){
+    expect(findNeighbors("A0").sort()).to.eql(["A1", "B0", "B1"].sort())
+  })
+  it('gets all the spaces around the dig spot accounting for walls', function(){
+    expect(findNeighbors("J9").sort()).to.eql(["I8", "I9", "J8"].sort())
+  })
+
 })

@@ -6,6 +6,7 @@ const expect = chai.expect;
 
 import {
   parseEntry,
+  encodeEntry,
   isValidLetter,
 } from '../src/parser';
 
@@ -48,5 +49,15 @@ describe('parseEntry()', function(){
   })
   it('should cut down longer entries', function(){
     expect(parseEntry("A4andThisIsIrrelevant")).to.equal(40);
+  })
+})
+
+describe('encodeEntry()', function(){
+  it('should make a number from a battleship code "D4"', function(){
+    expect(encodeEntry(43)).to.equal("D4");
+  })
+
+  it('should handle lowercase like "e7"', function(){
+    expect(encodeEntry(74)).to.equal("E7");
   })
 })

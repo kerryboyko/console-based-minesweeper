@@ -1,3 +1,4 @@
+import _ from 'lodash';
 
 export const alphaDict = {
   A: 0,
@@ -11,6 +12,8 @@ export const alphaDict = {
   I: 8,
   J: 9,
 }
+
+const numDict = _.invert(alphaDict);
 
 export const isValidLetter = (str) => ((str.length === 1) && str.match(/[a-j]/i));
 
@@ -30,3 +33,5 @@ export const parseEntry = (code) => {
     return false;
   }
 }
+
+export const encodeEntry = (number) => numDict[number % 10] + Math.floor(number / 10).toString()
