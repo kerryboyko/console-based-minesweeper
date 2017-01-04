@@ -33,13 +33,28 @@ const ICE = [
 import {parseEntry, alphaDict} from '../src/parser';
 
 import {
+  deepArrayCopy,
   markMinefield,
   layMinefield,
   createMinefield,
   findNeighbors,
   dig,
   createIce,
+  flagMinefield,
 } from '../src/board';
+
+describe('deepArrayCopy', function(){
+  it('copies an array deeply', function(){
+    let source = deepArrayCopy(MINES);
+    let experiment = deepArrayCopy(MINES);
+    experiment = experiment.map((el) => "Foo");
+
+    expect(source).to.eql(MINES);
+    expect(experiment).to.eql(
+      ["Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo" ]
+    )
+  })
+})
 
 let testField = layMinefield("G7");
 console.log("TestField");
@@ -149,7 +164,7 @@ describe('dig()', function(){
     expect(dig(MINES, ICE, "D4")).to.eql([
       [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ],
       [ '?', '?', '?', '?', '4', '3', '2', '3', '?', '?' ],
-      [ '?', '2', '?', '?', '1', '0', '0', '1', '?', '?' ],
+      [ '?', '?', '?', '?', '1', '0', '0', '1', '?', '?' ],
       [ '?', '?', '1', '1', '1', '0', '1', '3', '?', '?' ],
       [ '?', '?', '1', '0', '0', '1', '2', '?', '?', '?' ],
       [ '?', '?', '1', '0', '0', '1', '?', '?', '?', '?' ],
@@ -158,5 +173,18 @@ describe('dig()', function(){
       [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ],
       [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ] ]
     );
+  })
+})
+
+describe('flagMinefield', function(){
+  it('adds a flag', function(){
+    let experiment = flagMinefield(ICE, "C3");
+    let expected = ICE.slice(0, 3).concat([[
+      "?", "?", "M", "?", "?", "?", "?", "?", "?", "?",
+    ]]).concat(ICE.slice(4))
+    expect(flagMinefield(ICE, "C3")).to.eql(expected)
+  })
+  it('removes a flag', function(){
+    expect(flagMinefield(flagMinefield(ICE, "C3"), "C3")).to.eql(ICE); 
   })
 })

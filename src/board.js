@@ -5,6 +5,12 @@ import {parseEntry, encodeEntry} from './parser';
 const getRow = (num) => Math.floor(num/10);
 const getCol = (num) => num % 10;
 
+
+export const deepArrayCopy = (array) => array.map((el) => (Array.isArray(el) ? deepArrayCopy(el) : el) )
+Array.prototype.deepCopy = function() {
+    return(deepArrayCopy(this))
+};
+
 export const createIce = () => _.chunk(_.fill(Array(100), "?"), 10);
 
 const knuthShuffler = (array) => {
@@ -65,10 +71,11 @@ export const createMinefield = (initialDig) => markMinefield(layMinefield(intial
 
 // UNTESTED AS OF YET.
 export const dig = (minefield, ice, digSpot) => {
+  let newIce = ice.deepCopy();
   let rowI = getRow(parseEntry(digSpot));
   let colI = getCol(parseEntry(digSpot));
-  if (ice[rowI][colI] !== "?" && ice[rowI][colI] !== 'M'){
-    return ice;
+  if (newIce[rowI][colI] !== "?" && newIce[rowI][colI] !== 'M'){
+    return newIce;
   }
   if (minefield[rowI][colI] === "*"){
     console.log("BOOM!");
@@ -76,16 +83,51 @@ export const dig = (minefield, ice, digSpot) => {
     minefield.forEach((row) => console.log(row));
     return minefield
   } else {
-    ice[rowI][colI] = minefield[rowI][colI];
+    newIce[rowI][colI] = minefield[rowI][colI];
     if(minefield[rowI][colI] === "0"){
       let neighbors = findNeighbors(digSpot);
       neighbors.forEach((neighbor) => {
-        let iceSpot = ice[getRow(parseEntry(neighbor))][getCol(parseEntry(neighbor))]
+        let iceSpot = newIce[getRow(parseEntry(neighbor))][getCol(parseEntry(neighbor))]
         if(iceSpot === '?' || iceSpot === 'M'){
-          ice = dig(minefield, ice, neighbor);
+          newIce = dig(minefield, newIce, neighbor);
         }
       })
     }
-    return ice;
+    return newIce;
+  }
+}
+
+export const flagMinefield = (ice, flagSpot) => {
+  let newIce = ice.deepCopy();
+  let rowI = getRow(parseEntry(flagSpot));
+  let colI = getCol(parseEntry(flagSpot));
+  if (newIce[rowI][colI] === '?'){
+    newIce[rowI][colI] = 'M';
+  } else if (newIce[rowI][colI] === 'M') {
+    newIce[rowI][colI] = '?'
+  } else {
+    console.log("You can't place a flag there. Please try again")
+  }
+  return newIce
+}
+
+// needs test
+export const checkVictory = (minefield, ice) => {
+  let flatIce = _.flatten(ice);
+  let countFlags = flatIce.filter((el) => (el === M)).length;
+  if (countFlags < 20){
+    return false;
+  }
+  if (countFlags > 20){
+    return false;
+  }
+  if (countFlags === 20){
+    let flatField = _.flatten(minefield);
+    for (let i = 0; i < minefield.length; i++){
+      if (flatField[i] === '*' && flatIce[i] !== 'M'){
+        return false;
+      }
+    }
+    return true;
   }
 }
