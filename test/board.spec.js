@@ -33,7 +33,6 @@ const ICE = [
 import {parseEntry, alphaDict} from '../src/parser';
 
 import {
-  deepArrayCopy,
   markMinefield,
   layMinefield,
   createMinefield,
@@ -43,19 +42,6 @@ import {
   flagMinefield,
   checkVictory,
 } from '../src/board';
-
-describe('deepArrayCopy', function(){
-  it('copies an array deeply', function(){
-    let source = deepArrayCopy(MINES);
-    let experiment = deepArrayCopy(MINES);
-    experiment = experiment.map((el) => "Foo");
-
-    expect(source).to.eql(MINES);
-    expect(experiment).to.eql(
-      ["Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo", "Foo" ]
-    )
-  })
-})
 
 let testField = layMinefield("G7");
 console.log("TestField");

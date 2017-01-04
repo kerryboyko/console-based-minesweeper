@@ -1,27 +1,30 @@
 import _ from 'lodash';
 import {parseEntry, encodeEntry} from './parser';
+import {deepArrayCopy, knuthShuffler} from './util';
 
 
 const getRow = (num) => Math.floor(num/10);
 const getCol = (num) => num % 10;
 
-
-export const deepArrayCopy = (array) => array.map((el) => (Array.isArray(el) ? deepArrayCopy(el) : el) )
 Array.prototype.deepCopy = function() {
     return(deepArrayCopy(this))
 };
 
 export const createIce = () => _.chunk(_.fill(Array(100), "?"), 10);
 
-const knuthShuffler = (array) => {
-  for(let i = 0; i < array.length; i++){
-    let rand = Math.floor(Math.random() * array.length);
-    let temp = array[i];
-    array[i] = array[rand];
-    array[rand] = temp;
-  }
-  return array;
+export const layMinefield = (initialDig) => {
+  // create an array with 20 mines and 79 empties;
+  let mines = _.fill(Array(20), "*");
+  let blanks = _.fill(Array(79), " ");
+  let minefield = knuthShuffler(mines.concat(blanks));
+  let firstGuess = parseEntry(initialDig);
+  minefield = minefield.slice(0, firstGuess).concat(" ").concat(minefield.slice(firstGuess));
+  // we now have a minefield where the first guess is guaranteed to be clear.
+  minefield = _.chunk(minefield, 10)
+  // minefield is now a matrix and not a linear array.
+  return minefield;
 }
+
 
 export const markMinefield = (minefield) => {
   // minefield is a matrix.
@@ -43,19 +46,6 @@ export const markMinefield = (minefield) => {
   return minefield;
 }
 
-export const layMinefield = (initialDig) => {
-  // create an array with 20 mines and 79 empties;
-  let mines = _.fill(Array(20), "*");
-  let blanks = _.fill(Array(79), " ");
-  let minefield = knuthShuffler(mines.concat(blanks));
-  let firstGuess = parseEntry(initialDig);
-  minefield = minefield.slice(0, firstGuess).concat(" ").concat(minefield.slice(firstGuess));
-  // we now have a minefield where the first guess is guaranteed to be clear.
-  minefield = _.chunk(minefield, 10)
-  // minefield is now a matrix and not a linear array.
-  return minefield;
-}
-
 export const findNeighbors = (digSpot) => {
   let digNum = parseEntry(digSpot);
   let rowI = Math.floor(digNum/10);
@@ -68,8 +58,6 @@ export const findNeighbors = (digSpot) => {
 
 export const createMinefield = (initialDig) => markMinefield(layMinefield(intialDig));
 
-
-// UNTESTED AS OF YET.
 export const dig = (minefield, ice, digSpot) => {
   let newIce = ice.deepCopy();
   let rowI = getRow(parseEntry(digSpot));
