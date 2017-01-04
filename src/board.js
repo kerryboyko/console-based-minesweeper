@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import {parseEntry, encodeEntry} from './parser';
 
-let ice = _.chunk(_.fill(Array(100), "?"), 10);
 
 const getRow = (num) => Math.floor(num/10);
 const getCol = (num) => num % 10;
+
+export const createIce = () => _.chunk(_.fill(Array(100), "?"), 10);
 
 const knuthShuffler = (array) => {
   for(let i = 0; i < array.length; i++){
@@ -66,19 +67,20 @@ export const createMinefield = (initialDig) => markMinefield(layMinefield(intial
 export const dig = (minefield, ice, digSpot) => {
   let rowI = getRow(parseEntry(digSpot));
   let colI = getCol(parseEntry(digSpot));
-  if (ice[rowI][colI] !== "?" || ice[rowI][colI] !== 'M'){
+  if (ice[rowI][colI] !== "?" && ice[rowI][colI] !== 'M'){
     return ice;
   }
   if (minefield[rowI][colI] === "*"){
     console.log("BOOM!");
     console.log("Game Over");
     minefield.forEach((row) => console.log(row));
+    return minefield
   } else {
-    ice[rowI][colI] === minefield[rowI][colI];
+    ice[rowI][colI] = minefield[rowI][colI];
     if(minefield[rowI][colI] === "0"){
       let neighbors = findNeighbors(digSpot);
       neighbors.forEach((neighbor) => {
-        let iceSpot = ice[getRow(parseEntry(neighbor))][getCol(parseEntry(neighbr))]
+        let iceSpot = ice[getRow(parseEntry(neighbor))][getCol(parseEntry(neighbor))]
         if(iceSpot === '?' || iceSpot === 'M'){
           ice = dig(minefield, ice, neighbor);
         }
