@@ -56,7 +56,7 @@ export const findNeighbors = (digSpot) => {
     .filter((el) => el !== digNum).map((el) => encodeEntry(el));
 }
 
-export const createMinefield = (initialDig) => markMinefield(layMinefield(intialDig));
+export const createMinefield = (initialDig) => markMinefield(layMinefield(initialDig));
 
 export const dig = (minefield, ice, digSpot) => {
   let newIce = ice.deepCopy();

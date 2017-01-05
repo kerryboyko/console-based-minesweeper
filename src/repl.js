@@ -19,7 +19,7 @@ export const HELP = [
   'To see these instructions again, type "help"',
 ]
 
-const STANDARD_PROMPT = 'What would you like to do? ("dig", "flag", "quit")'
+const STANDARD_PROMPT = 'What would you like to do? ("dig", "flag", "quit")> '
 
 export const showHelp = (konsole = console) => {
   HELP.forEach((line) => konsole.log(line));
@@ -61,7 +61,7 @@ export class Game {
     })
   }
 
-  start() {
+  start(konsole = console) {
     playIntro(konsole).then((() => {
       showHelp();
       display(this.ice);
@@ -75,7 +75,7 @@ export class Game {
     process.stdin.destroy();
   }
 
-  route(input) {
+  route(input, konsole = console) {
     input = input.toUpperCase();
 
     if (input.substring(0, 4) === "QUIT") {
@@ -88,24 +88,26 @@ export class Game {
         .then((input) => this.route(input));
 
     } else if (input.substring(0, 3) === "DIG") {
-      let digSpot = input.substring(4, 2)
+      let digSpot = input.substring(4, 6)
       konsole.log(`Digging ${digSpot}`)
       if (this.mines === null) {
         this.mines = createMinefield(digSpot);
       }
       this.ice = dig(this.mines, this.ice, digSpot);
       if (this.ice === "BOOM") {
+        konsole.log("BOOM!!!!")
         konsole.log("")
         display(this.mines);
         this.userInterface.close();
         process.stdin.destroy();
-        newGame();
+        process.exit(0);
         return;
       }
+      display(this.ice);
       this.prompt(STANDARD_PROMPT)
         .then((input) => this.route(input));
     } else if (input.substring(0, 4) === "FLAG") {
-      flagMinefield(this.ice, input.substring(5, 2));
+      flagMinefield(this.ice, input.substring(5, 7));
       if (checkVictory(this.mines, this.ice)) {
         konsole.log("CONGRATULATIONS!");
         display(this.mines);
@@ -126,7 +128,7 @@ export class Game {
   }
 }
 
-const newGame = () => {
+export const newGame = () => {
   let g = new Game();
   g.start();
 }
