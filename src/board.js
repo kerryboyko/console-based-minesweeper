@@ -66,9 +66,6 @@ export const dig = (minefield, ice, digSpot) => {
     return newIce;
   }
   if (minefield[rowI][colI] === "*"){
-    console.log("BOOM!");
-    console.log("Game Over");
-    minefield.forEach((row) => console.log(row));
     return "BOOM"
   } else {
     newIce[rowI][colI] = minefield[rowI][colI];

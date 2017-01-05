@@ -4,7 +4,7 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const MINES = [
+export const MINES = [
   [ '*', '2', '*', '*', '*', '*', '*', '2', '*', '2' ],
   [ '2', '3', '3', '4', '4', '3', '2', '3', '3', '*' ],
   [ '*', '2', '1', '*', '1', '0', '0', '1', '*', '2' ],
@@ -17,7 +17,7 @@ const MINES = [
   [ '0', '0', '1', '*', '1', '0', '0', '1', '1', '1' ],
 ]
 
-const ICE = [
+export const ICE = [
   [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ],
   [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ],
   [ '?', '?', '?', '?', '?', '?', '?', '?', '?', '?' ],
@@ -145,7 +145,7 @@ describe('dig()', function(){
     ])
   })
   it('blows up when you dig a mine', function(){
-    expect(dig(MINES, ICE, "C0")).to.eql(MINES)
+    expect(dig(MINES, ICE, "C0")).to.eql("BOOM")
   })
   it('expands when you hit a free square', function(){
     expect(dig(MINES, ICE, "D4")).to.eql([
