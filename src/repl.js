@@ -79,7 +79,7 @@ export class Game {
     input = input.toUpperCase();
 
     if (input.substring(0, 4) === "QUIT") {
-      quit(userInterface);
+      quit(this.userInterface);
       return;
 
     } else if (input.substring(0, 4) === "HELP") {
@@ -97,23 +97,18 @@ export class Game {
       if (this.ice === "BOOM") {
         konsole.log("BOOM!!!!")
         konsole.log("")
-        display(this.mines);
-        this.userInterface.close();
-        process.stdin.destroy();
-        process.exit(0);
+        quit(this.userInterface);
         return;
       }
       display(this.ice);
       this.prompt(STANDARD_PROMPT)
         .then((input) => this.route(input));
     } else if (input.substring(0, 4) === "FLAG") {
-      flagMinefield(this.ice, input.substring(5, 7));
+      this.ice = flagMinefield(this.ice, input.substring(5, 7));
       if (checkVictory(this.mines, this.ice)) {
         konsole.log("CONGRATULATIONS!");
         display(this.mines);
-        this.userInterface.close();
-        process.stdin.destroy();
-        newGame();
+        quit(this.userInterface);
         return;
       } else {
         display(this.ice);
